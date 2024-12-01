@@ -12,38 +12,44 @@ async function main() {
   console.log(result);
 }
 
-export function doTheJob(data: ReturnType<typeof parseData>) {
-  let total = 0;
+function countAdjacentDuplicates(value: {
+  index: number;
+  value: number;
+  list: number[];
+}) {
+  let count = 1;
 
-  for (const number of data.listOne) {
-    const searchList = data.listTwo;
-    
-    const index = binarySearch(searchList, number);
-    if (index < 0) continue;
-
-    const value = searchList[index];
-    let count = 1;
-
-    for (let i = index - 1; i >= 0; i--) {
-      const compareValue = searchList[i];
-      if (value === compareValue) count++;
-      else break;
-    }
-
-    for (let i = index + 1; i < searchList.length; i++) {
-      const compareValue = searchList[i];
-      if (value === compareValue) count++;
-      else break;
-    }
-
-    total += count * number;
-
-    /* const occurences =
-      data.listTwo.filter((item) => item === number).length * number;
-    total += occurences; */
+  for (let i = value.index - 1; i >= 0; i--) {
+    const compareValue = value.list[i];
+    if (value.value === compareValue) count++;
+    else break;
   }
 
-  return total;
+  for (let i = value.index + 1; i < value.list.length; i++) {
+    const compareValue = value.list[i];
+    if (value.value === compareValue) count++;
+    else break;
+  }
+
+  return {
+    value: value.value,
+    count: count,
+  };
+}
+
+export function doTheJob(data: ReturnType<typeof parseData>) {
+  const occurences = data.listOne
+    .map((item) => binarySearch(data.listTwo, item))
+    .filter((index) => index >= 0)
+    .map((index) => ({
+      index: index,
+      value: data.listTwo[index],
+      list: data.listTwo,
+    }))
+    .map(countAdjacentDuplicates)
+    .reduce((prev, curr) => prev + curr.count * curr.value, 0);
+
+  return occurences;
 }
 
 function binarySearch(list: number[], search: number): number {
