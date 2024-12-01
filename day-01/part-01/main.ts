@@ -1,7 +1,7 @@
 if (import.meta.main) main();
 
 async function main() {
-  const text = await Deno.readTextFile("example-data.txt");
+  const text = await Deno.readTextFile("data.txt");
 
   const data = parseData(text);
 
@@ -23,15 +23,7 @@ export function parseData(data: string) {
 }
 
 export function doTheJob(data: ReturnType<typeof parseData>) {
-  const list = [];
-
-  for (let i = 0; i < data.listOne.length; i++) {
-    const itemOne = data.listOne[i];
-    const itemTwo = data.listTwo[i];
-
-    if (itemOne > itemTwo) list.push(itemOne - itemTwo);
-    else list.push(itemTwo - itemOne);
-  }
-
-  return list.reduce((acc, curr) => acc + curr, 0);
+  return data.listOne
+    .map((a, i) => Math.abs(a - data.listTwo[i]))
+    .reduce((acc, curr) => acc + curr, 0);
 }
