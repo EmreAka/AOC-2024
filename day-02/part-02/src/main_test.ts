@@ -17,17 +17,16 @@ Deno.test(async function shouldParseData() {
   ]);
 });
 
-/* Deno.test(function shouldCountSafeReportsRealData() {
-  const data = parseData(Deno.readTextFileSync("public/data.txt"));
+Deno.test(async function shouldCountSafeReportsRealData() {
+  const data = parseData(await Deno.readTextFile("public/data.txt"));
 
   const safeReportCount = countSafeReports(data);
 
-  assertEquals(safeReportCount, 402);
-}); */
+  assertEquals(safeReportCount, 455);
+});
 
-
-Deno.test(function shouldCountSafeReportsExampleData() {
-  const data = parseData(Deno.readTextFileSync("public/example-data.txt"));
+Deno.test(async function shouldCountSafeReportsExampleData() {
+  const data = parseData(await Deno.readTextFile("public/example-data.txt"));
 
   const safeReportCount = countSafeReports(data);
 
@@ -43,4 +42,17 @@ Deno.test(function shouldCountSafeReportsEdgeCase() {
   const safeReportCount = countSafeReports(data);
 
   assertEquals(safeReportCount, 2);
+});
+
+Deno.bench({
+  name: "Should Count Safe Reports",
+  async fn() {
+    const file = await Deno.readTextFile("public/data.txt");
+
+    const data = parseData(file);
+
+    const safeReportCount = countSafeReports(data);
+
+    assertEquals(safeReportCount, 455);
+  },
 });
