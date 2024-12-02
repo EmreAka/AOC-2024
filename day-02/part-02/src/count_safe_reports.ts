@@ -14,8 +14,8 @@ function checkIfReportIsSafe(report: number[]) {
   // if not set false already, it means it is safe...
   // it will increase the count and continue to the next report
   // else it will check by increase
-  if (isSafe) return true
-  
+  if (isSafe) return true;
+
   // because is set false in the above loop,
   // we reset the state
   isSafe = true;
@@ -32,17 +32,29 @@ function checkIfReportIsSafe(report: number[]) {
 
   // if not set false , it means it is safe...
   // it will increase the count and continue to the next report
-  if (isSafe) return true
+  if (isSafe) return true;
 
-  return false
+  return false;
 }
 
 export function countSafeReports(reports: number[][]) {
   let result = 0;
 
   for (const report of reports) {
-    const isSafe = checkIfReportIsSafe(report)
-    if (isSafe) result++
+    const isSafe = checkIfReportIsSafe(report);
+    if (isSafe) result++;
+    else {
+      for (let index = 0; index < report.length; index++) {
+        const newReport = [...report];
+        newReport.splice(index, 1);
+        const isSafe = checkIfReportIsSafe(newReport);
+
+        if (isSafe) {
+          result++;
+          break;
+        }
+      }
+    }
   }
 
   return result;
