@@ -11,9 +11,6 @@ function checkIfReportIsSafe(report: number[]) {
     if (prev === curr || prev < curr || diff < 1 || diff > 3) isSafe = false;
   }
 
-  // if not set false already, it means it is safe...
-  // it will increase the count and continue to the next report
-  // else it will check by increase
   if (isSafe) return true;
 
   // because is set false in the above loop,
@@ -30,8 +27,6 @@ function checkIfReportIsSafe(report: number[]) {
     if (prev === curr || prev > curr || diff < 1 || diff > 3) isSafe = false;
   }
 
-  // if not set false , it means it is safe...
-  // it will increase the count and continue to the next report
   if (isSafe) return true;
 
   return false;
