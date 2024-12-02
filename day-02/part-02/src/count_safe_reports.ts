@@ -1,44 +1,48 @@
-function checkIfReportFollowsTrend(report: number[]): boolean {
-  const [first, second] = report;
-
-  if (first > second) {
-    for (let index = 0; index < report.length; index++) {
-      const prev = report[index - 1];
-      const curr = report[index];
-
-      if (index > 0 && (prev === curr || prev < curr)) return false;
-    }
-  }
-  if (first < second) {
-    for (let index = 0; index < report.length; index++) {
-      const prev = report[index - 1];
-      const curr = report[index];
-
-      if (index > 0 && (prev === curr || prev > curr)) return false;
-    }
-  }
-
-  return true;
-}
-
-function checkIfLevelsWithinRange(report: number[]): boolean {
-  for (let index = 1; index < report.length; index++) {
-    const prev = report[index - 1];
-    const curr = report[index];
-
-    const diff = Math.abs(prev - curr);
-
-    if (diff < 1 || diff > 3) return false;
-  }
-
-  return true;
-}
-
 export function countSafeReports(reports: number[][]) {
-  const result = reports
-    .filter(checkIfReportFollowsTrend)
-    .filter(checkIfLevelsWithinRange)
-    .reduce((prev) => prev + 1, 0);
+  let result = 0;
+
+  for (const report of reports) {
+    let isSafe = true;
+
+    // decrease
+    for (let index = 1; index < report.length; index++) {
+      const curr = report[index];
+      const prev = report[index - 1];
+      const diff = Math.abs(prev - curr)
+
+      //unsafe
+      if (prev === curr || prev < curr || diff < 1 || diff > 3) isSafe = false;
+    }
+
+    // if not set false already, it means it is safe...
+    // it will increase the count and continue to the next report
+    // else it will check by increase
+    if (isSafe) {
+      result++;
+      continue;
+    }
+
+    // because is set false in the above loop,
+    // we reset the state 
+    isSafe = true
+
+    // increase
+    for (let index = 1; index < report.length; index++) {
+      const curr = report[index];
+      const prev = report[index - 1];
+      const diff = Math.abs(prev - curr)
+
+      //unsafe
+      if (prev === curr || prev > curr || diff < 1 || diff > 3) isSafe = false;
+    }
+
+    // if not set false , it means it is safe...
+    // it will increase the count and continue to the next report
+    if (isSafe) {
+      result++;
+      continue;
+    }
+  }
 
   return result;
 }
