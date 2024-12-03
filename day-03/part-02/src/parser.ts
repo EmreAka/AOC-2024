@@ -6,6 +6,10 @@ export type Mul = {
 export function parseData(data: string): Mul[] {
   const muls: Mul[] = [];
 
+  let flag = true
+  let startIndex = 0
+  let endIndex = 0
+
   for (let index = 0; index < data.length; index++) {
     const start = data.substring(index, index + 4);
 
@@ -23,6 +27,14 @@ export function parseData(data: string): Mul[] {
     );
 
     if (isNaN(parseInt(firstDigitStr)) || isNaN(parseInt(secondDigit))) continue;
+
+    startIndex = endIndex;
+    endIndex = index;
+    const stringBeforeMulstring = data.substring(startIndex, endIndex)
+    if (stringBeforeMulstring.lastIndexOf("don't()") > stringBeforeMulstring.lastIndexOf("do()")) flag = false
+    if (stringBeforeMulstring.lastIndexOf("do()") > stringBeforeMulstring.lastIndexOf("don't()") ) flag = true
+    
+    if(!flag) continue;
 
     muls.push({ x: +firstDigitStr, y: +secondDigit });
   }
