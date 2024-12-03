@@ -13,14 +13,6 @@ Deno.test(async function shouldParseData() {
             y: 4
         },
         {
-            x: 5,
-            y: 5
-        },
-        {
-            x: 11,
-            y: 8
-        },
-        {
             x: 8,
             y: 5
         },
@@ -34,5 +26,5 @@ Deno.test(async function shouldCalculateResultOfMultiplications() {
     
     const result = calculateResultOfMultiplications(muls);
 
-    assertEquals(result, 161)
+    assertEquals(result, 48)
 });
