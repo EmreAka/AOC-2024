@@ -1,8 +1,12 @@
-export function add(a: number, b: number): number {
-  return a + b;
-}
+import { calculateResultOfMultiplications } from "./calculator.ts";
+import { parseData, type Mul } from "./parser.ts";
 
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
-if (import.meta.main) {
-  console.log("Add 2 + 3 =", add(2, 3));
+if (import.meta.main) main();
+
+async function main() {
+  const data = await Deno.readTextFile("public/data.txt");
+  const muls: Mul[] = parseData(data);
+  const result = calculateResultOfMultiplications(muls);
+
+  console.log("Result.", result);
 }
