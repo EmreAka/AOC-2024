@@ -28,15 +28,5 @@ Deno.test(async function shouldCountXmas() {
 
   const count = countXmas(result);
 
-  assertEquals(count, 18);
-});
-
-Deno.test(function shouldCountTwo() {
-  const result = [
-    ["S","A","M","X","M","A","S"],
-  ];
-
-  const count = countXmas(result);
-
-  assertEquals(count, 2);
+  assertEquals(count, 9);
 });
